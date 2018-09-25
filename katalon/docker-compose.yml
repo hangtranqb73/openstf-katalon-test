@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  appium:
+    image: appium/appium:1.9.0-p0
+    volumes:
+      - adb:/root/.android
+      - ./appium:/scripts
+      - ./KatalonAndroidSample:/katalon/katalon/source
+    ports:
+      - "4723"
+    command: bash -c -e /scripts/start.sh
+    depends_on:
+      - stf-portforwarder
+    environment:
+      - STF_ACCESS_TOKEN
+  katalon:
+    image: katalonstudio/katalon:5.7.0
+    volumes:
+      - ./KatalonAndroidSample:/katalon/katalon/source
+      - ./KatalonAndroidSample/Reports:/katalon/katalon/report
+      - ./katalon:/root
+    entrypoint: ''
+    command: 'bash'
+    tty: true
+    depends_on:
+      - appium
+  stf-portforwarder:
+    build:
+      context: ./stf-portforwarder
+    image: stf-portforwarder
+    volumes:
+      - ./stf-portforwarder:/root
+    command: /root/start.sh
+    ports:
+      - "7100"
+    environment:
+      # destination info of OpenSTF side SSH server
+      - DEST_IP
+      - DEST_PORT
+volumes:
+  adb:
+
