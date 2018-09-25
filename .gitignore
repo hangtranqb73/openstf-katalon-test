@@ -1,0 +1,11 @@
+openstf/sshd/ssh/log
+openstf/sshd/ssh/authorized_keys
+openstf/sshd/ssh/host_keys
+
+katalon/.env
+katalon/appium/node_modules
+katalon/appium/adbkey.pub
+katalon/katalon/.bash_history
+katalon/katalon/.katalon
+katalon/katalon/config
+
