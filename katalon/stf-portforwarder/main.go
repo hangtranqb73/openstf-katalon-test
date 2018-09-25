@@ -71,6 +71,7 @@ func startPortFowarding(port uint) error {
   if err != nil {
     return fmt.Errorf("SSH couldn't execute")
   }
+  fmt.Printf("Port forwarding started\n")
   fmt.Printf("%v\n", processMap)
 
   return nil
@@ -84,6 +85,7 @@ func stopPortFowarding(port uint) error {
 
   processMap[port].Kill()
   delete(processMap, port)
+  fmt.Printf("Port forwarding stopped\n")
   fmt.Printf("%v\n", processMap)
 
   return nil
@@ -99,7 +101,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
   }
 
   param := parseRequest(r)
-  fmt.Printf("%v\n", param)
+  fmt.Printf("Request parsed\n", param)
+  fmt.Printf("params: %v\n", param)
   if param == nil {
     w.WriteHeader(http.StatusBadRequest)
     return
@@ -126,6 +129,7 @@ func clearHandler(w http.ResponseWriter, r *http.Request) {
   for _, process := range processMap {
     process.Kill()
   }
+  fmt.Printf("*clear\n")
   processMap = make(map[uint]*os.Process)
 
   w.WriteHeader(http.StatusOK)

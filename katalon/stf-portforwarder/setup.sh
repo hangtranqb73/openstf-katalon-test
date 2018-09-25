@@ -8,6 +8,7 @@ if [ ! -e "$SSH_DIR" ]; then
   mkdir $SSH_DIR
   chmod 700 $SSH_DIR
   ssh-keygen -t ed25519 -P "" -f "${SSH_DIR}/id.key" -C "SSH port forward client"
+  chmod 600 $SSH_DIR/id.key
 else
   echo -e "\e[32m STF-PortFowarder setup has alredy done \e[m"
   exit 0

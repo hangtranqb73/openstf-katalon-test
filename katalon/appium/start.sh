@@ -3,6 +3,8 @@
 set -e
 cd `dirname $0`
 
+npm install
+
 function portforward {
   if [ "$1" = "clear" ]; then
     curl http://stf-portforwarder/clear --fail
