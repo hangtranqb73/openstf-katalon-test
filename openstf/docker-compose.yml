@@ -1,0 +1,32 @@
+version: '2'
+services:
+  db:
+    image: rethinkdb
+    command: rethinkdb --bind all
+    ports:
+      - 8082:8080
+    volumes:
+      - db_data:/data
+  stf:
+    image: openstf/stf:v3.4.0
+    ports:
+      - 7100:7100
+      - 7110:7110
+      - 7400-7700:7400-7700
+    links:
+      - db
+    environment:
+      - RETHINKDB_PORT_28015_TCP=tcp://db:28015
+      - RETHINKDB_ENV_DATABASE=stf
+    command: stf local --allow-remote --public-ip 127.0.0.1 --adb-host host.docker.internal
+  sshd:
+    build:
+      context: ./sshd
+    image: sshd-alpine
+    command: /ssh/start.sh
+    ports:
+      - '50022:22'
+    volumes:
+      - ./sshd/ssh:/ssh
+volumes:
+  db_data:
