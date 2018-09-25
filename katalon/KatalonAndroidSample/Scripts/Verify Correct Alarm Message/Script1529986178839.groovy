@@ -27,13 +27,16 @@ Mobile.comment('Given that user has started an application')
 def appPath = PathUtil.relativeToAbsolutePath(GlobalVariable.G_AndroidApp, RunConfiguration.getProjectDir())
 
 DesiredCapabilities capabilities = new DesiredCapabilities()
-// capabilities.setCapability('deviceName', 'samsung SCL22 (Android 5.0)')
 capabilities.setCapability('deviceName', 'Android')
 capabilities.setCapability('platformName', 'Android')
 capabilities.setCapability('app', appPath)
 // --- test
-capabilities.setCapability('remoteAdbPort', '7401')
-capabilities.setCapability('remoteAdbHost', 'appium')
+capabilities.setCapability('adbPort', '7401')
+
+// ↓ This affects adb execution commands. `adb -H appium ...`
+// But when `-H` option specified, adb doesn't response any.
+// And env ADBHOST works as expected so should not run this line.
+// capabilities.setCapability('remoteAdbHost', 'stf-portforwarder')
 // test ---
 
 AppiumDriverManager.createMobileDriver(MobileDriverType.ANDROID_DRIVER, capabilities, new URL('http://appium:4723/wd/hub'))
