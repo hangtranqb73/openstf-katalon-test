@@ -5,7 +5,8 @@ driver
   .init({
     deviceName: 'Android',
     platformName: 'Android',
-    app: '/Users/satoshiisemura/dev/katalon/openstf-katalon/katalon/KatalonAndroidSample/androidapp/APIDemos.apk'
+    app: '/katalon/katalon/source/androidapp/APIDemos.apk',
+    adbPort: 7401
   })
   .setImplicitWaitTimeout(3000)
   .quit();
