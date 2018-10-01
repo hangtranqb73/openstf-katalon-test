@@ -36,7 +36,7 @@ services:
       - "7100"
     environment:
       # destination info of OpenSTF side SSH server
-      - DEST_IP
+      - DEST_HOST
       - DEST_PORT
 volumes:
   adb:

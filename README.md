@@ -63,8 +63,10 @@ $ ./start.sh
 ```
 
 on the first time Katalon execution, you need to input these info:
-- OpenSTF's global IP
-  - if PC(A) and PC(B) are in same network, input PC(A)'s local IP
+- OpenSTF's hostname
+  - specify PC(A)'s hostname or global IP
+    - if PC(A) and PC(B) are in same network, input PC(A)'s local IP
+    - if PC(A) and PC(B) are same PC, specify `host.docker.internal`
 - OpenSTF's AccessToken
   - paste the copied access token
 - SSH port

@@ -5,6 +5,7 @@ import(
   "io"
   "os"
   "net"
+  "strings"
   "strconv"
   "io/ioutil"
   "os/exec"
@@ -13,16 +14,16 @@ import(
 )
 
 type Config struct {
-  DestIP net.IP
+  DestHost string
   DestPort uint
 }
 
 func parseConfig() (*Config, error) {
-  const DEST_IP = "DEST_IP"
-  ipStr := os.Getenv(DEST_IP)
-  ip := net.ParseIP(ipStr)
-  if ip == nil {
-    errMsg := fmt.Errorf("%v is invalid: %v\n", DEST_IP, ipStr)
+  const DEST_HOST = "DEST_HOST"
+  host := os.Getenv(DEST_HOST)
+  _, err := net.ResolveIPAddr("ip", host)
+  if err != nil {
+    errMsg := fmt.Errorf("Resolve error: ", err.Error())
     return nil, errMsg
   }
 
@@ -34,8 +35,9 @@ func parseConfig() (*Config, error) {
     return nil, errMsg
   }
 
+  fmt.Printf("%v = %v\n%v = %v", DEST_HOST, host, DEST_PORT, portStr)
   return &Config {
-    DestIP: ip,
+    DestHost: host,
     DestPort: uint(port),
   }, nil
 }
@@ -64,8 +66,9 @@ func startPortFowarding(port uint) error {
     return fmt.Errorf(msg, port)
   }
 
-  cmd := exec.Command("ssh", makeCommandArgs(*config, port)...)
-  exec.Command("ssh", makeCommandArgs(*config, port)...)
+  args := makeCommandArgs(*config, port)
+  fmt.Println("exec: ssh ", strings.Join(args, " "))
+  cmd := exec.Command("ssh", args...)
   err := cmd.Start()
   processMap[port] = cmd.Process
   if err != nil {
@@ -153,7 +156,7 @@ func makeCommandArgs(config Config, port uint) []string {
     "-o", "UserKnownHostsFile=/dev/null",
     "-gNL", fmt.Sprintf("%v:stf:%v", port, port),
     "-i", "/root/.ssh/id.key", "-p", fmt.Sprintf("%v", config.DestPort),
-    fmt.Sprintf("ssh@%v", config.DestIP),
+    fmt.Sprintf("ssh@%v", config.DestHost),
   }
 }
 

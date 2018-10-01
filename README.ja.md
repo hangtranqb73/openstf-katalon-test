@@ -63,8 +63,10 @@ $ ./start.sh
 ```
 
 最初にKatalonを実行する際、これらの入力が求められます
-- OpenSTF's global IP ( PC(A)のグローバルIP )
-  - PC(A)とPC(B)が同じネットワーク上にある場合は、PC(A)のローカルIPを入力する
+- OpenSTF's hostname ( OpenSTFのホスト名 )
+  - PC(A)のホスト名かグローバルIPを指定する
+    - PC(A)とPC(B)が同じネットワーク上にある場合は、PC(A)のローカルIPを入力する
+    - PC(A)とPC(B)が同じPCの場合は、 `host.docker.internal` を指定する
 - OpenSTF's AccessToken
   - 先ほどコピーしたアクセストークンを貼り付ける
 - SSH port
