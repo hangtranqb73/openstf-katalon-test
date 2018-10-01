@@ -24,6 +24,11 @@ import com.kms.katalon.core.annotation.SetupTestCase
 import com.kms.katalon.core.annotation.TearDown
 import com.kms.katalon.core.annotation.TearDownTestCase
 
+import org.openqa.selenium.remote.DesiredCapabilities as DesiredCapabilities
+import com.kms.katalon.core.appium.driver.AppiumDriverManager as AppiumDriverManager
+import com.kms.katalon.core.mobile.driver.MobileDriverType as MobileDriverType
+import com.kms.katalon.core.configuration.RunConfiguration as RunConfiguration
+
 /**
  * Some methods below are samples for using SetUp/TearDown in a test suite.
  */
@@ -31,9 +36,26 @@ import com.kms.katalon.core.annotation.TearDownTestCase
 /**
  * Setup test suite environment.
  */
-@SetUp(skipped = true) // Please change skipped to be false to activate this method.
+@SetUp(skipped = false) // Please change skipped to be false to activate this method.
 def setUp() {
 	// Put your code here.
+	println "check whether any stored driver"
+	def storedDrivers = RunConfiguration.getStoredDrivers()
+	if (storedDrivers.size() == 0) {
+		println "no drivers found. start Appium Driver"
+		def a = RunConfiguration.getHostProperties()
+		
+		DesiredCapabilities capabilities = new DesiredCapabilities()
+		println "DesiredCapabilities"
+		def capMap = RunConfiguration.getDriverPreferencesProperties()["WebUI"]
+		capMap.each { key, val ->
+			println key + ": " + val
+			capabilities.setCapability(key, val)
+		}
+		
+		def appiumUrl = RunConfiguration.getExecutionProperties().drivers.system.WebUI.remoteWebDriverUrl
+		AppiumDriverManager.createMobileDriver(MobileDriverType.ANDROID_DRIVER, capabilities, new URL(appiumUrl))
+	}
 }
 
 /**
